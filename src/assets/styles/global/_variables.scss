@@ -1,0 +1,22 @@
+//gradients
+
+$gradient: linear-gradient(30deg, #ff3cac 0%, #784ba0 50%, #2b86c5 100%);
+$dark-gradient: linear-gradient(
+  180.2deg,
+  rgb(30, 33, 48) 6.8%,
+  rgb(74, 98, 110) 131%
+);
+
+//shadows
+
+$shadow: inset 0 0 7px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 0.5);
+$btn-shadow: 0 0 4px 4px rgba(255, 255, 255, 0.1);
+
+//colors
+
+$pink: #ff3cac;
+$green: #1fd178;
+$black: #0e0e0e;
+$grey: #c8c8c8;
+$light-grey: #d7d7d7;
+$light: #fbfbfb;
