@@ -1,0 +1,19 @@
+.toolbar {
+  width: 100px;
+  height: 455px;
+  box-shadow: $shadow;
+  background: $light;
+  border-radius: 10px;
+  padding: 10px;
+  &-tools {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    // align-items: flex-start;
+  }
+  &-note {
+    box-shadow: $shadow;
+    color: #ffbf47;
+    border-radius: 5px;
+  }
+}

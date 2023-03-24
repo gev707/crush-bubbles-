@@ -11,13 +11,6 @@ module.exports = {
         filename: '[name][contenthash].js',
         clean: true
     },
-    resolve: {
-        extensions: ['.js', '.scss', '.css'],
-        alias: {
-            'images': path.join(__dirname, 'src/assets/images')
-        }
-    },
-    devtool: "source-map",
     devServer: {
         static: {
             directory: path.resolve(__dirname, 'dist')
@@ -44,15 +37,12 @@ module.exports = {
                 use: [
                     {
                         loader: "style-loader"
-                    }, {
+                    }, 
+                    {
                         loader: "css-loader",
                     },
                     {
-                        loader: "resolve-url-loader",
-                    },
-                    {
                         loader: 'sass-loader',
-                        options: { sourceMap: true }
                     }
                 ]
             },
@@ -65,10 +55,9 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif)$/i,
-                dependency: { not: ['url'] },
                 use: [
                     {
-                        loader: 'url-loader',
+                        loader: 'file-loader',
                     },
                 ],
                 type: 'javascript/auto'

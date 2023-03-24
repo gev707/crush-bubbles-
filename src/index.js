@@ -1,6 +1,8 @@
-import { showNotification } from './helpers';
 import './assets/styles/main.scss';
+import { startGame } from './app';
 
-window.onload = function () {
-    showNotification('start')
-}
+
+document.addEventListener('DOMContentLoaded',function(){
+    startGame()
+})
+
