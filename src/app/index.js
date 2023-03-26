@@ -1,160 +1,94 @@
+import { colors, showMoves, showScore } from './constants';
+import { Board, displayCountdownStart, showNotification } from "./components";
 import {
-    Board,
-    displayCountdownStart,
-    showNotification
-} from "../helpers"
-import { colors } from "./constant"
+    forColumnFour,
+    forColumnTree,
+    forRowFour,
+    forRowTree,
+    slideDown,
+    superTale
+} from './managers';
+
 const board = new Board(colors);
 const width = board.width;
-const newCircules = board.circules;
-let score = 0;
-let count = 20;
-let showScore = document.querySelector('.score');
-let moves = document.querySelector('.moves');
+const taleBoard = board.circules;
 
+
+let moves = 20;
+let winnerScore = 100;
 
 function startGame() {
-    // showNotification('start');
-    // displayCountdownStart();
     board.createBoard();
+    displayCountdownStart();
 
-    newCircules.forEach((items) => items.addEventListener('dragstart', dragStart))
-    newCircules.forEach((items) => items.addEventListener('dragover', dragOver))
-    newCircules.forEach((items) => items.addEventListener('dragenter', dragEnter))
-    newCircules.forEach((items) => items.addEventListener('dragleave', dragLeave))
-    newCircules.forEach((items) => items.addEventListener('dragend', dragEnd))
-    newCircules.forEach((items) => items.addEventListener('drop', dragDrop));
+    taleBoard.forEach((items) => items.addEventListener('dragstart', dragStart))
+    taleBoard.forEach((items) => items.addEventListener('dragover', dragOver))
+    taleBoard.forEach((items) => items.addEventListener('dragenter', dragEnter))
+    taleBoard.forEach((items) => items.addEventListener('dragleave', dragLeave))
+    taleBoard.forEach((items) => items.addEventListener('dragend', dragEnd))
+    taleBoard.forEach((items) => items.addEventListener('drop', dragDrop));
 }
 
 // create drag & drop functional
 
-let colorDragged;
-let colorReplaced;
-let colorIdDragged;
-let colorIdReplaced;
+let currentTale;
+let otherTale;
+let currentTaleID;
+let otherTaleID;
 
 function dragEnter(e) { e.preventDefault() }
 function dragLeave(e) { e.preventDefault() }
 function dragOver(e) { e.preventDefault() }
 
 function dragStart() {
-    colorDragged = this.style.backgroundColor;
-    colorIdDragged = parseInt(this.id);
+    currentTale = this.style.backgroundColor;
+    currentTaleID = parseInt(this.id);
 }
 function dragDrop() {
-    colorReplaced = this.style.backgroundColor;
-    colorIdReplaced = parseInt(this.id);
-    this.style.backgroundColor = colorDragged;
-    newCircules[colorIdDragged].style.backgroundColor = colorReplaced
+    otherTale = this.style.backgroundColor;
+    otherTaleID = parseInt(this.id);
+    this.style.backgroundColor = currentTale;
+    taleBoard[currentTaleID].style.backgroundColor = otherTale;
 }
 
 function dragEnd() {
     const availibleMoves = [
-        colorIdDragged - 1,
-        colorIdDragged + 1,
-        colorIdDragged - width,
-        colorIdDragged + width
+        currentTaleID - 1,
+        currentTaleID + 1,
+        currentTaleID - width,
+        currentTaleID + width
     ]
-    let availible = availibleMoves.includes(colorIdReplaced);
+    let availible = availibleMoves.includes(otherTaleID);
 
-    if (colorIdReplaced && availible) {
-        colorIdReplaced = null;
+    if (otherTaleID && availible) {
+        otherTaleID = null;
     }
-    else if (colorIdReplaced && !availible) {
-        newCircules[colorIdReplaced].style.backgroundColor = colorReplaced;
-        newCircules[colorIdDragged].style.backgroundColor = colorDragged;
+    else if (otherTaleID && !availible) {
+        taleBoard[otherTaleID].style.backgroundColor = otherTale;
+        taleBoard[currentTaleID].style.backgroundColor = currentTale;
     }
     else {
-        newCircules[colorIdDragged].style.backgroundColor = colorDragged
+        taleBoard[currentTaleID].style.backgroundColor = currentTale;
     }
-    count -= 1;
-    moves.innerHTML = count;
+    moves -= 1;
+    showMoves.innerHTML = moves;
+    if (moves === 0) showNotification('over');
 }
 
-function forRowTree() {
-    for (let i = 0; i < 61; i++) {
-        let row = [i, i + 1, i + 2];
-        let matchColors = newCircules[i].style.backgroundColor;
-        let blank = newCircules[i].style.backgroundColor === '';
-
-        let getShapes = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55];
-        if (getShapes.includes(i)) continue;
-
-        if (row.every(index => newCircules[index].style.backgroundColor === matchColors && !blank)) {
-            row.forEach(index => newCircules[index].style.backgroundColor = '');
-            score += 3;
-            showScore.innerHTML = score
-        }
-    }
-
-}
-function forColumnTree() {
-    for (let i = 0; i < 47; i++) {
-        let column = [i, i + width, i + width * 2];
-        let matchColors = newCircules[i].style.backgroundColor;
-        let blank = newCircules[i].style.backgroundColor === '';
-        if (column.every(index => newCircules[index].style.backgroundColor === matchColors && !blank)) {
-            column.forEach(index => newCircules[index].style.backgroundColor = '');
-            score += 3;
-            showScore.innerHTML = score
-        }
-    }
-
-}
-
-function forRowFour() {
-    for (let i = 0; i < 60; i++) {
-        let row = [i, i + 1, i + 2, i + 3];
-        let matchColors = newCircules[i].style.backgroundColor;
-        let blank = newCircules[i].style.backgroundColor === '';
-
-        let getShapes = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55];
-        if (getShapes.includes(i)) continue;
-
-        if (row.every(index => newCircules[index].style.backgroundColor === matchColors && !blank)) {
-            row.forEach(index => newCircules[index].style.backgroundColor = '');
-            score += 4;
-            showScore.innerHTML = score
-        }
-    }
-
-}
-function forColumnFour() {
-    for (let i = 0; i < 47; i++) {
-        let column = [i, i + width, i + width * 2, i + width * 3, i + width * 5];
-        let matchColors = newCircules[i].style.backgroundColor;
-        let blank = newCircules[i].style.backgroundColor === '';
-        if (column.every(index => newCircules[index].style.backgroundColor === matchColors && !blank)) {
-            column.forEach(index => newCircules[index].style.backgroundColor = '');
-            score += 4;
-            showScore.innerHTML = score
-        }
-    }
-
-}
-
-function slideDown() {
-    for (let i = 0; i < 55; i++) {
-        if (newCircules[i + width].style.backgroundColor === '') {
-            newCircules[i + width].style.backgroundColor = newCircules[i].style.backgroundColor;
-            newCircules[i].style.backgroundColor = '';
-            const firstRow = [0, 1, 2, 3, 4, 5, 6, 7];
-            const isFirstRow = firstRow.includes(i);
-            if (isFirstRow && newCircules[i].style.backgroundColor === '') {
-                let randomColor = Math.floor(Math.random() * colors.length);
-                newCircules[i].style.backgroundColor = colors[randomColor]
-            }
-        }
-
-    }
+function win() {
+    const show = Number(showScore.innerHTML)
+    if (show > winnerScore) showNotification('win');
 }
 
 window.setInterval(() => {
-    slideDown()
-    forRowTree();
-    forColumnTree();
-    forRowFour();
-    forColumnFour()
-}, 50)
+    forRowFour(taleBoard);
+    forColumnFour(taleBoard, width)
+    forRowTree(taleBoard);
+    forColumnTree(taleBoard, width)
+    slideDown(taleBoard, width)
+    superTale(taleBoard)
+    win();
+}, 100)
+
 
 export { startGame }
