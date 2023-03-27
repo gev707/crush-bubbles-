@@ -1,10 +1,10 @@
-import { showScore, colors } from "../constants";
+import { showScore, colors, getShapesForSuperBuster, getShapesFour, getShapesTree } from "../constants";
 
 let score = 0;
 
 // match colors in row 3
 
-function forRowTree(arr) {
+function crushTreeRow(arr) {
     for (let i = 0; i < 61; i++) {
         let row = [i, i + 1, i + 2];
         let matchColors = arr[i].style.backgroundColor;
@@ -17,8 +17,7 @@ function forRowTree(arr) {
                 arr[i].style.backgroundColor = colors[randomColor]
             }
         }
-        let getShapes = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55];
-        if (getShapes.includes(i)) continue;
+        if (getShapesTree.includes(i)) continue;
 
         if (row.every(index => arr[index].style.backgroundColor === matchColors && !isEmpty)) {
             row.forEach(index => arr[index].style.backgroundColor = '');
@@ -31,13 +30,12 @@ function forRowTree(arr) {
 
 // match colors in row 4
 
-function forRowFour(arr) {
+function crushFourRow(arr) {
     for (let i = 0; i < 60; i++) {
         let rowFour = [i, i + 1, i + 2, i + 3];
         let matchColors = arr[i].style.backgroundColor;
         let isEmpty = arr[i].style.backgroundColor === '';
-        let getShapes = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55];
-        if (getShapes.includes(i)) continue;
+        if (getShapesFour.includes(i)) continue;
 
         if (rowFour.every(index => arr[index].style.backgroundColor === matchColors && !isEmpty)) {
             rowFour.forEach(index => {
@@ -52,7 +50,7 @@ function forRowFour(arr) {
 
 // // match colors in column 3
 
-function forColumnTree(arr, width) {
+function crushTreeCol(arr, width) {
     for (let i = 0; i < 47; i++) {
         let column = [i, i + width, i + width * 2];
         let matchColors = arr[i].style.backgroundColor;
@@ -67,7 +65,7 @@ function forColumnTree(arr, width) {
 
 // // match colors in column 4
 
-function forColumnFour(arr, width) {
+function crushFourCol(arr, width) {
     for (let i = 0; i < 39; i++) {
         let columnFour = [i, i + width, i + width * 2, i + width * 3];
         let matchColors = arr[i].style.backgroundColor;
@@ -100,30 +98,28 @@ function slideDown(arr, width) {
 }
 
 function superTale(arr) {
-    for (let i = 0; i < 60; i++) {
-        let superBuster = arr[i].style.backgroundColor === 'black';
-        let isEmpty = arr[i].style.backgroundColor === '';
-        let getShapes = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55];
-        if (getShapes.includes(i)) continue;
+    const superBuster = arr.filter(item => item.style.backgroundColor === 'black');
+    if (superBuster.length) {
+        for (let i = 0; i < superBuster.length; i++) {
+            if (getShapesForSuperBuster.includes(i)) continue;
+            superBuster[i].addEventListener('click', () => {
+                for (let i = 0; i < 48; i++) {
+                    arr[i + 6].style.backgroundColor = '';
+                }
+                score += 5;
+                showScore.innerHTML = score;
+                superBuster[i].style.backgroundColor = ''
+            })
 
-        if (superBuster && !isEmpty) {
-                arr[i - 3].style.backgroundColor = '';
-                arr[i - 2].style.backgroundColor = '';
-                arr[i - 1].style.backgroundColor = '';
-                arr[i].style.backgroundColor = '';
-                arr[i + 1].style.backgroundColor = '';
-                arr[i + 2].style.backgroundColor = '';
-                arr[i + 3].style.backgroundColor = ''
-            score += 7;
-            showScore.innerHTML = score
         }
     }
 }
+
 export {
-    forRowTree,
-    forColumnTree,
-    forColumnFour,
-    forRowFour,
+    crushTreeRow,
+    crushTreeCol,
+    crushFourCol,
+    crushFourRow,
     slideDown,
     superTale
 }

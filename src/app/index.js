@@ -1,10 +1,10 @@
 import { colors, showMoves, showScore } from './constants';
 import { Board, displayCountdownStart, showNotification } from "./components";
 import {
-    forColumnFour,
-    forColumnTree,
-    forRowFour,
-    forRowTree,
+    crushFourCol,
+    crushTreeCol,
+    crushFourRow,
+    crushTreeRow,
     slideDown,
     superTale
 } from './managers';
@@ -15,7 +15,7 @@ const taleBoard = board.circules;
 
 
 let moves = 20;
-let winnerScore = 100;
+let winnerScore = 300;
 
 function startGame() {
     board.createBoard();
@@ -35,6 +35,7 @@ let currentTale;
 let otherTale;
 let currentTaleID;
 let otherTaleID;
+
 
 function dragEnter(e) { e.preventDefault() }
 function dragLeave(e) { e.preventDefault() }
@@ -59,7 +60,6 @@ function dragEnd() {
         currentTaleID + width
     ]
     let availible = availibleMoves.includes(otherTaleID);
-
     if (otherTaleID && availible) {
         otherTaleID = null;
     }
@@ -81,10 +81,10 @@ function win() {
 }
 
 window.setInterval(() => {
-    forRowFour(taleBoard);
-    forColumnFour(taleBoard, width)
-    forRowTree(taleBoard);
-    forColumnTree(taleBoard, width)
+    crushFourRow(taleBoard);
+    crushFourCol(taleBoard, width)
+    crushTreeRow(taleBoard);
+    crushTreeCol(taleBoard, width)
     slideDown(taleBoard, width)
     superTale(taleBoard)
     win();

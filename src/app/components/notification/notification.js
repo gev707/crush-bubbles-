@@ -22,8 +22,8 @@ const showNotification = (variant) => {
             break;
     }
     btn.addEventListener('click', () => {
-        window.location.reload();
         notification.style.display = 'none';
+        window.location.reload();
     })
 }
 

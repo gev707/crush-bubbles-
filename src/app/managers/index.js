@@ -1,17 +1,17 @@
 import {
-    forColumnFour,
-    forRowFour,
-    forColumnTree,
-    forRowTree,
+    crushFourCol,
+    crushFourRow,
+    crushTreeCol,
+    crushTreeRow,
     slideDown,
     superTale
 } from "./manageGame";
 
 export {
-    forColumnFour,
-    forRowTree,
-    forColumnTree,
-    forRowFour,
+    crushFourCol,
+    crushTreeRow,
+    crushTreeCol,
+    crushFourRow,
     slideDown,
     superTale
 }
